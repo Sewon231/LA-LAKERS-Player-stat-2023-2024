@@ -1,0 +1,135 @@
+// Player information list
+const players = [
+    {
+        name: "Lebron James",
+        image: "https://codehs.com/uploads/7ab6de941449bf7c13cc923b5d233129",
+        stats: [26.3, 6.7, 9.7, 1.7, 1.3]
+    },
+    {
+        name: "Austin Reaves",
+        image: "https://codehs.com/uploads/5222517c806096b7ada0608b008a1343",
+        stats: [14.7, 5.0, 2.7, 1.3, 0.3]
+    },
+    {
+        name: "Anthony Davis",
+        image: "https://codehs.com/uploads/49ccbb46492678ec73470f2edc8ccc64",
+        stats: [32.3, 13.3, 3.3, 0.7, 1.7]
+    },
+    {
+        name: "Rui Hachimura",
+        image: "https://codehs.com/uploads/274ca47c53e0805e7055ed1ae5576c9a",
+        stats: [5.0, 3.3, 0.7, 0.0, 0.0]
+    },
+    {
+        name: "D'Angelo Russell",
+        image: "https://codehs.com/uploads/0adf53dd776ed05727d7fe082fdf4cfc",
+        stats: [12.0, 3.0, 3.7, 1.0, 0.3]
+    }
+];
+
+// Get player name from the user
+const userInput = prompt("Enter the player's name:");
+
+// Find the player with the entered name
+const selectedPlayer = players.find(player => player.name === userInput);
+
+// If the player is found in the list
+if(selectedPlayer){
+    // Print player information
+    console.log("Player Name:", selectedPlayer.name);
+    console.log("Player Image:", selectedPlayer.image);
+    console.log("Bar Graph Data:", selectedPlayer.stats);
+    
+    // Function to display the Lakers logo as background
+    function showLakersLogo(){
+        // Display Lakers logo image in background
+        document.body.style.backgroundImage = "url('https://codehs.com/uploads/8ce6db265cc4350c1e1eb7008656dc67')";
+        document.body.style.backgroundSize = 'contain';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.height = '200px'; 
+        document.body.style.width = '300px'; 
+    }
+    
+    // Function to display selected player's photo
+    function showSelectedPlayerPhoto(selectedPlayer) {
+        // Add image to the page
+        const playerImage = new Image();
+        playerImage.src = selectedPlayer.image;
+        playerImage.style.width = '120px'; 
+        playerImage.style.height = '120px'; 
+        playerImage.style.position = 'absolute';
+        playerImage.style.left = '10px'; 
+        playerImage.style.top = '90px'; 
+        document.body.appendChild(playerImage);
+    }
+    
+    // Function to draw the bar chart
+    function drawBarChart(data) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 350; 
+        canvas.height = 200; 
+        const ctx = canvas.getContext('2d');
+        
+        const barWidth = 20;
+        const spacing = 40;
+        const baseHeight = 150; 
+        
+        ctx.fillStyle = 'yellow';
+        ctx.font = '13px Arial';
+        data.forEach((value, index) => {
+            const x = (barWidth + spacing) * index;
+            const height = value * 3; 
+            const y = baseHeight - height;
+            
+            // Draw bar graph
+            ctx.fillRect(x, y, barWidth, height);
+            
+            // Display the data value
+            ctx.fillStyle = 'yellow';
+            let label = '';
+            switch (index) {
+                case 0:
+                    label = "Pts";
+                    break;
+                case 1:
+                    label = "Reb";
+                    break;
+                case 2:
+                    label = "Ast";
+                    break;
+                case 3:
+                    label = "Stl";
+                    break;
+                case 4:
+                    label = "Blk";
+                    break;
+            }
+           ctx.fillText(`${label}: ${value}`, x, y - 5); 
+        });
+        
+        // Remove canvas border
+    canvas.style.border = 'none';
+        
+        // Return the canvas
+        return canvas;
+    }
+    
+    // Function to layout the elements on the screen including Lakers logo, selectedPlayer's photo, and the bar chart
+    function layoutElements() {
+        showLakersLogo();
+        showSelectedPlayerPhoto(selectedPlayer);
+        const barChartCanvas = drawBarChart(selectedPlayer.stats);
+        barChartCanvas.style.position = 'absolute';
+        barChartCanvas.style.right = '-50px'; 
+        barChartCanvas.style.bottom = '30px'; 
+        document.body.appendChild(barChartCanvas);
+    }   
+    
+    // Arrange elements when the page is loaded
+    layoutElements();
+    
+} else {
+    // If the player is not found in the list
+    console.log("Player not found.");
+}
